@@ -10,7 +10,7 @@ public class Conexion {
     public Connection obtenerConexion() {
         try {
             // 🔹 Cambia estos valores según tu configuración local
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Facultad;encrypt=false;";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=Tienda_Ropa;encrypt=false;";
             String usuario = "sa"; //usuario de SQL Server
             String contrasena = "JL123456"; // contraseña
 
@@ -30,7 +30,7 @@ public class Conexion {
 
         try (Connection conn = conexion.obtenerConexion()) {
             if (conn != null) {
-                String query = "SELECT * FROM ESTUDIANTE";
+                String query = "SELECT * FROM Clientes";
 
                 try (Statement stmt = conn.createStatement();
                      ResultSet rs = stmt.executeQuery(query)) {
@@ -40,8 +40,8 @@ public class Conexion {
                     } else {
                         while (rs.next()) {
                             System.out.println(
-                                    "ID: " + rs.getString("id_Estudiante") +
-                                            " | Nombre: " + rs.getString("FirstName")
+                                    "ID: " + rs.getString("ClienteId") +
+                                            " | Nombre: " + rs.getString("Nombre")
                             );
                         }
                     }
