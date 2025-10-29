@@ -48,7 +48,7 @@ public class ClienteController {
     }
 
     // --------------------- INSERTAR ---------------------
-    // JSON
+
     @PostMapping(value = "/insertar", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> insertarClienteJson(@RequestBody Cliente cliente) {
         if (cliente == null || cliente.getNombre() == null || cliente.getEmail() == null)
@@ -58,10 +58,10 @@ public class ClienteController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo agregar el cliente");
     }
 
-    // FORM (x-www-form-urlencoded)
+
     @PostMapping(value = "/insertar", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> insertarClienteForm(Cliente cliente) {
-        // Spring mapea los campos del form a la clase Cliente (getters/setters)
+
         if (cliente == null || cliente.getNombre() == null || cliente.getEmail() == null)
             return ResponseEntity.badRequest().body("Los campos 'nombre' y 'email' son obligatorios.");
         boolean ok = clienteService.insertarCliente(cliente);
@@ -70,7 +70,7 @@ public class ClienteController {
     }
 
     // --------------------- ACTUALIZAR ---------------------
-    // JSON
+
     @PutMapping(value = "/actualizar", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> actualizarClienteJson(@RequestBody Cliente cliente) {
         if (cliente == null || cliente.getIdCliente() == null)
@@ -80,7 +80,7 @@ public class ClienteController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo actualizar el cliente (verifica que exista el id).");
     }
 
-    // FORM (x-www-form-urlencoded)
+
     @PutMapping(value = "/actualizar", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<?> actualizarClienteForm(Cliente cliente) {
         if (cliente == null || cliente.getIdCliente() == null)
@@ -91,7 +91,6 @@ public class ClienteController {
     }
 
     // --------------------- ELIMINAR ---------------------
-    // Usando PathVariable para evitar confusiones con query params
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarCliente(@PathVariable("id") Integer id) {
         if (id == null) return ResponseEntity.badRequest().body("El id es obligatorio.");

@@ -46,7 +46,7 @@ public class ProductoController {
     }
 
     // -------- INSERTAR --------
-    // JSON
+
     @PostMapping(value = "/insertar", consumes = { MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8" })
     public ResponseEntity<?> insertarJson(@RequestBody Producto p) {
         if (p == null || p.getNombre() == null || p.getPrecioVenta() == null)
@@ -56,7 +56,7 @@ public class ProductoController {
                 : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo agregar el producto");
     }
 
-    // FORM
+
     @PostMapping(value = "/insertar", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> insertarForm(Producto p) {
         if (p == null || p.getNombre() == null || p.getPrecioVenta() == null)
@@ -67,7 +67,7 @@ public class ProductoController {
     }
 
     // -------- ACTUALIZAR --------
-    // JSON
+
     @PutMapping(value = "/actualizar", consumes = { MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8" })
     public ResponseEntity<?> actualizarJson(@RequestBody Producto p) {
         if (p == null || p.getIdProducto() == null)
@@ -77,7 +77,7 @@ public class ProductoController {
                 : ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo actualizar el producto (verifica que exista el id).");
     }
 
-    // FORM
+
     @PutMapping(value = "/actualizar", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> actualizarForm(Producto p) {
         if (p == null || p.getIdProducto() == null)
