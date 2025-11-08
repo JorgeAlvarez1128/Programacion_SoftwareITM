@@ -30,7 +30,7 @@ public class ClienteRepository implements ClienteRepositoryInterface {
                 cliente.setIdCliente(rs.getInt("ClienteId"));
                 cliente.setNombre(rs.getString("Nombre"));
                 cliente.setEmail(rs.getString("Email"));
-                cliente.setCelular(rs.getString("Telefono"));
+                cliente.setTelefono(rs.getString("Telefono"));
                 clientes.add(cliente);
             }
 
@@ -111,7 +111,7 @@ public class ClienteRepository implements ClienteRepositoryInterface {
             PreparedStatement stmt = connection.prepareStatement(clienteRepositoryHelper.insertarCliente());
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getEmail());
-            stmt.setString(3, cliente.getCelular());
+            stmt.setString(3, cliente.getTelefono());
 
             int filas = stmt.executeUpdate();
             result = filas > 0;
@@ -135,7 +135,7 @@ public class ClienteRepository implements ClienteRepositoryInterface {
             PreparedStatement stmt = connection.prepareStatement(clienteRepositoryHelper.actualizarCliente());
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getEmail());
-            stmt.setString(3, cliente.getCelular());
+            stmt.setString(3, cliente.getTelefono());
             stmt.setInt(4, cliente.getIdCliente());
 
             int filas = stmt.executeUpdate();

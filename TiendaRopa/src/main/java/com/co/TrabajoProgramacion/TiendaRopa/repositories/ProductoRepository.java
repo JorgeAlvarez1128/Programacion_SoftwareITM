@@ -89,7 +89,7 @@ public class ProductoRepository implements ProductoRepositoryInterface {
             int rows = ps.executeUpdate();
             if (rows > 0) {
                 try (ResultSet keys = ps.getGeneratedKeys()) {
-                    if (keys.next()) p.setIdProducto(keys.getInt(1));
+                    if (keys.next()) p.setProductoId(keys.getInt(1));
                 }
                 result = true;
             }
@@ -116,7 +116,7 @@ public class ProductoRepository implements ProductoRepositoryInterface {
             ps.setString(5, p.getColor());
             if (p.getProveedorId() == null) ps.setNull(6, Types.INTEGER); else ps.setInt(6, p.getProveedorId());
             if (p.getPrecioVenta() == null) ps.setNull(7, Types.DECIMAL); else ps.setDouble(7, p.getPrecioVenta());
-            ps.setInt(8, p.getIdProducto());
+            ps.setInt(8, p.getProductoId());
 
             result = ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -147,7 +147,7 @@ public class ProductoRepository implements ProductoRepositoryInterface {
 
     private Producto mapRow(ResultSet rs) throws SQLException {
         Producto p = new Producto();
-        p.setIdProducto(rs.getInt("ProductoId"));
+        p.setProductoId(rs.getInt("ProductoId"));
         p.setCodigoBarra(rs.getString("CodigoBarra"));
         p.setNombre(rs.getString("Nombre"));
         int cat = rs.getInt("CategoriaId");   p.setCategoriaId(rs.wasNull() ? null : cat);

@@ -70,7 +70,7 @@ public class ProductoController {
 
     @PutMapping(value = "/actualizar", consumes = { MediaType.APPLICATION_JSON_VALUE, "application/json;charset=UTF-8" })
     public ResponseEntity<?> actualizarJson(@RequestBody Producto p) {
-        if (p == null || p.getIdProducto() == null)
+        if (p == null || p.getProductoId() == null)
             return ResponseEntity.badRequest().body("El campo 'idProducto' es obligatorio para actualizar.");
         boolean ok = productoService.actualizarProducto(p);
         return ok ? ResponseEntity.ok("Producto actualizado correctamente")
@@ -80,7 +80,7 @@ public class ProductoController {
 
     @PutMapping(value = "/actualizar", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> actualizarForm(Producto p) {
-        if (p == null || p.getIdProducto() == null)
+        if (p == null || p.getProductoId() == null)
             return ResponseEntity.badRequest().body("El campo 'idProducto' es obligatorio para actualizar.");
         boolean ok = productoService.actualizarProducto(p);
         return ok ? ResponseEntity.ok("Producto actualizado correctamente")
