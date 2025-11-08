@@ -19,7 +19,7 @@ public class Cliente implements Comparable<Cliente>{
     @Column(name = "Nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "Telefono")                   // en BD es Telefono (no 'Celular')
+    @Column(name = "Telefono")                
     private String telefono;
 
     @Column(name = "Email", nullable = false, unique = true)
