@@ -100,7 +100,7 @@ public class VentaService {
                         it.getCantidad(),
                         v.getFechaVenta(),
                         it.getPrecioUnit(),
-                        v.getTotal() // si quieres subtotal de item, usa it.getSubtotal()
+                        v.getTotal()
                 ));
             }
         }
