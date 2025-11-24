@@ -12,9 +12,11 @@ import com.co.TrabajoProgramacion.TiendaRopa.repositories.jpa.VentaJpaRepository
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class VentaService {
@@ -49,16 +51,17 @@ public class VentaService {
             throw new IllegalArgumentException("La cantidad debe ser mayor que cero");
         }
 
-        // Encabezado de la venta
         var venta = new Venta();
         venta.setCliente(cliente);
-        venta.setFechaVenta(LocalDateTime.now());
+
+        LocalDateTime fechaVenta = (dto.fechaVenta() != null)
+                ? dto.fechaVenta().atStartOfDay()
+                : LocalDateTime.now();
+        venta.setFechaVenta(fechaVenta);
 
         double total = dto.cantidad() * producto.getPrecioVenta();
         venta.setTotal(total);
-
         venta = ventaRepo.save(venta);
-
         // Item de la venta
         var item = new VentaItem();
         item.setVenta(venta);
