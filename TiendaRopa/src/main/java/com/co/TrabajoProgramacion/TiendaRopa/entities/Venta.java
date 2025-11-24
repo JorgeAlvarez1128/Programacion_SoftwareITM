@@ -1,9 +1,12 @@
 package com.co.TrabajoProgramacion.TiendaRopa.entities;
+
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "Ventas")
 public class Venta {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "VentaId")
@@ -27,8 +31,8 @@ public class Venta {
     @Column(name = "Total", nullable = false)
     private Double total;
 
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venta",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<VentaItem> items = new ArrayList<>();
-
-
 }

@@ -18,11 +18,13 @@ public class VentaController {
 
     private final VentaService ventaService;
 
-    public VentaController(VentaService ventaService) { this.ventaService = ventaService; }
+    public VentaController(VentaService ventaService) {
+        this.ventaService = ventaService;
+    }
 
     @Operation(summary = "Registrar una venta")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Venta creada"),
+            @ApiResponse(responseCode = "201", description = "Venta registrada"),
             @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
     @PostMapping(value = "/crear", consumes = MediaType.APPLICATION_JSON_VALUE)

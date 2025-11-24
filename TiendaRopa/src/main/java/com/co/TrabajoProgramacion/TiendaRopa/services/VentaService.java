@@ -2,8 +2,13 @@ package com.co.TrabajoProgramacion.TiendaRopa.services;
 
 import com.co.TrabajoProgramacion.TiendaRopa.dto.venta.VentaCreateDTO;
 import com.co.TrabajoProgramacion.TiendaRopa.dto.venta.VentaResponseDTO;
-import com.co.TrabajoProgramacion.TiendaRopa.entities.*;
-import com.co.TrabajoProgramacion.TiendaRopa.repositories.jpa.*;
+import com.co.TrabajoProgramacion.TiendaRopa.entities.Producto;
+import com.co.TrabajoProgramacion.TiendaRopa.entities.Venta;
+import com.co.TrabajoProgramacion.TiendaRopa.entities.VentaItem;
+import com.co.TrabajoProgramacion.TiendaRopa.repositories.jpa.ClienteJpaRepository;
+import com.co.TrabajoProgramacion.TiendaRopa.repositories.jpa.ProductoJpaRepository;
+import com.co.TrabajoProgramacion.TiendaRopa.repositories.jpa.VentaItemJpaRepository;
+import com.co.TrabajoProgramacion.TiendaRopa.repositories.jpa.VentaJpaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +21,24 @@ public class VentaService {
 
     private final ClienteJpaRepository clienteRepo;
     private final ProductoJpaRepository productoRepo;
-    private final VentaJpaRepository ventaRepo;
+    private final VentaJpaRepository   ventaRepo;
     private final VentaItemJpaRepository ventaItemRepo;
 
-    public VentaService(ClienteJpaRepository c, ProductoJpaRepository p,
-                        VentaJpaRepository v, VentaItemJpaRepository vi) {
-        this.clienteRepo = c;
-        this.productoRepo = p;
-        this.ventaRepo = v;
-        this.ventaItemRepo = vi;
+    public VentaService(ClienteJpaRepository clienteRepo,
+                        ProductoJpaRepository productoRepo,
+                        VentaJpaRepository ventaRepo,
+                        VentaItemJpaRepository ventaItemRepo) {
+        this.clienteRepo   = clienteRepo;
+        this.productoRepo  = productoRepo;
+        this.ventaRepo     = ventaRepo;
+        this.ventaItemRepo = ventaItemRepo;
     }
 
     @Transactional
     public VentaResponseDTO crearVenta(VentaCreateDTO dto) {
-        var cliente  = clienteRepo.findById(dto.clienteId())
+        var cliente = clienteRepo.findById(dto.clienteId())
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no existe"));
+
         var producto = productoRepo.findById(dto.productoId())
                 .orElseThrow(() -> new IllegalArgumentException("Producto no existe"));
 
@@ -38,18 +46,20 @@ public class VentaService {
             throw new IllegalStateException("Producto sin precio válido");
         }
         if (dto.cantidad() <= 0) {
-            throw new IllegalArgumentException("Cantidad debe ser mayor que cero");
+            throw new IllegalArgumentException("La cantidad debe ser mayor que cero");
         }
 
-        // 1) Encabezado
+        // Encabezado de la venta
         var venta = new Venta();
         venta.setCliente(cliente);
         venta.setFechaVenta(LocalDateTime.now());
+
         double total = dto.cantidad() * producto.getPrecioVenta();
         venta.setTotal(total);
+
         venta = ventaRepo.save(venta);
 
-        // 2) Item
+        // Item de la venta
         var item = new VentaItem();
         item.setVenta(venta);
         item.setProducto(producto);
@@ -59,30 +69,35 @@ public class VentaService {
 
         return new VentaResponseDTO(
                 venta.getId(),
-                cliente.getIdCliente(), cliente.getNombre(),
-                producto.getProductoId(), producto.getNombre(),
+                cliente.getIdCliente(),
+                cliente.getNombre(),
+                producto.getProductoId(),
+                producto.getNombre(),
                 dto.cantidad(),
                 venta.getFechaVenta(),
                 producto.getPrecioVenta(),
-                total
+                venta.getTotal()
         );
     }
 
     public List<VentaResponseDTO> listarPorCliente(Integer clienteId) {
         var ventas = ventaRepo.findByCliente_IdCliente(clienteId);
         var out = new ArrayList<VentaResponseDTO>();
-        for (var v : ventas) {
+
+        for (Venta v : ventas) {
             var items = ventaItemRepo.findByVenta_Id(v.getId());
-            for (var it : items) {
-                var p = it.getProducto();
+            for (VentaItem it : items) {
+                Producto p = it.getProducto();
                 out.add(new VentaResponseDTO(
                         v.getId(),
-                        v.getCliente().getIdCliente(), v.getCliente().getNombre(),
-                        p.getProductoId(), p.getNombre(),
+                        v.getCliente().getIdCliente(),
+                        v.getCliente().getNombre(),
+                        p.getProductoId(),
+                        p.getNombre(),
                         it.getCantidad(),
                         v.getFechaVenta(),
                         it.getPrecioUnit(),
-                        v.getTotal() // si quisieras subtotal por item, usa it.getSubtotal()
+                        v.getTotal() // si quieres subtotal de item, usa it.getSubtotal()
                 ));
             }
         }
